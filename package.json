@@ -4,8 +4,18 @@
   "description": "Api projetos",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc app.ts && nodemon app"
   },
   "author": "KaduHod",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19",
+    "typescript": "^4.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.16"
+  }
 }
