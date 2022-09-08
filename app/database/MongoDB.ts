@@ -2,9 +2,9 @@ import { MongoClient } from 'mongodb'
 import ConnectionParams from '../interfaces/ConnectionParams';
 
 export default class MongoDB {
-    public databaseUser:string | undefined;
-    public databaseName:string | undefined;
-    public password:string | undefined;
+    public databaseUser:string ;
+    public databaseName:string ;
+    public password:string ;
     public client:MongoClient | null;
     public isConnected:boolean;
     private connectionStructure:string;
@@ -21,11 +21,17 @@ export default class MongoDB {
     }
 
     public setConnectionString = ():boolean => {
-        if(!this.databaseName || !this.databaseUser || !this.password) return false;
-        this.connString = this.connectionStructure.replace(/<user>/, this.databaseUser)
+        try {
+            this.connString = this.connectionStructure.replace(/<user>/, this.databaseUser)
                                                   .replace(/<password>/,this.password)
                                                   .replace(/<database>/,this.databaseName);
-        return true;
+                                                  return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+        
+        
     }
 
     public setClient = ():boolean => {
@@ -41,6 +47,7 @@ export default class MongoDB {
     public openConnection = async () => {
         try {
             console.log('\t Connected!')
+            this.isConnected = true;
             return await this.client?.connect();
         } catch (error) {
             console.log(error)
@@ -51,6 +58,7 @@ export default class MongoDB {
 
     public closeConnection = () => {
         console.log('\t Connection closed!')
+        this.isConnected = false;
         this.client?.close();
     }
    

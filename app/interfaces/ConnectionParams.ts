@@ -1,5 +1,5 @@
 export default interface ConnectionParams {
-    password:string | undefined;
-    databaseName:string | undefined;
-    databaseUser:string | undefined;
+    password:string;
+    databaseName:string;
+    databaseUser:string;
 }

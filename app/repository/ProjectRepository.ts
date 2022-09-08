@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { Collection, CursorFlag, Document, MongoClient, ObjectId } from 'mongodb';
 import MongoDB from '../database/MongoDB';
 import ProjectInterface from '../interfaces/ProjectInterface';
 
@@ -13,8 +13,8 @@ export default class ProjectRepository {
         this.collection = this.db.collection('projects');
     }
 
-    public insertMyProjects = ():void => {
-        this.client.openConnection();
+    public insertMyProjects = async ():Promise<void> => {
+        await this.client.openConnection();
         
         const projects:ProjectInterface[] = [
             {
@@ -110,7 +110,40 @@ export default class ProjectRepository {
             
             
         ]
-        this.collection.insertMany(projects)
+        //this.collection.insertMany(projects)
         this.client.closeConnection();
+    }
+
+    public all = async ():Promise<Document | any>  => {
+        if(!this.client.isConnected) await this.client.openConnection();
+        try {
+            const cursor = this.collection.find();
+            const projects:any[] = [];
+            await cursor.forEach( (doc:any) => projects.push(doc) )
+            return projects;
+        } catch (error) {
+            return error
+        } finally {
+            this.client.closeConnection();
+        }
+    }
+    public CorrigirTesto = async():Promise<Document | any>=>{
+        if(!this.client.isConnected) await this.client.openConnection();
+        console.log(this.client)
+        try {
+
+            const filter = {
+                _id : new ObjectId("6319488639638a8f8e3792ee")
+            }
+            const $set = {
+                description: 'Construí este site para o meu sogro, que possui uma concessionario do candeias. Nele está disponível para os clientes todos os meios de contato com a concessíonaria, link direto para converso no whatts, localização e lista de hoteis disponiveis para a tão sonhada viagem de férias. Além disso construí uma api que recebe os dados do cliente pra cadastro no portal de registro de socios do candeias e um endpoint que exporta uma planilha com todos os clientes que se inscreveram pelo site.'
+            }
+            const result = await this.collection.updateOne(filter, {$set})
+            return result;
+        } catch (error) {
+            return error
+        } finally {
+            this.client.closeConnection();
+        }
     }
 }
