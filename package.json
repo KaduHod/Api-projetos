@@ -6,7 +6,6 @@
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start2": "tsc app.ts && nodemon app",
     "start": "nodemon app.ts"
   },
   "author": "KaduHod",

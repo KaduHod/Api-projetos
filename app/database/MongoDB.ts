@@ -50,6 +50,7 @@ export default class MongoDB {
             this.isConnected = true;
             return await this.client?.connect();
         } catch (error) {
+            console.log('\t Connection closed!')
             console.log(error)
             this.isConnected = false
             return false;

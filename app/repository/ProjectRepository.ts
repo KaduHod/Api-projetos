@@ -1,4 +1,4 @@
-import { Collection, CursorFlag, Document, MongoClient, ObjectId } from 'mongodb';
+import { Collection, CursorFlag, Document, MongoClient, ObjectID, ObjectId } from 'mongodb';
 import MongoDB from '../database/MongoDB';
 import ProjectInterface from '../interfaces/ProjectInterface';
 
@@ -127,9 +127,8 @@ export default class ProjectRepository {
             this.client.closeConnection();
         }
     }
-    public CorrigirTesto = async():Promise<Document | any>=>{
+    public CorrigirTesto = async():Promise<Document | any> =>{
         if(!this.client.isConnected) await this.client.openConnection();
-        console.log(this.client)
         try {
 
             const filter = {
@@ -145,5 +144,20 @@ export default class ProjectRepository {
         } finally {
             this.client.closeConnection();
         }
+    }
+
+    public getProject = async (projectId:ObjectId):Promise<Document | any> =>
+    {
+        try {
+            if(!this.client.isConnected) await this.client.openConnection();
+            const data = await this.collection.findOne({_id:projectId});
+            return data;
+        } catch (error) {
+            console.log(error)
+            return error;
+        } finally {
+            this.client.closeConnection();
+        }
+        
     }
 }

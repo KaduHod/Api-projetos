@@ -1,25 +1,19 @@
+const path = require('path')
 import { Request, Response } from "express";
 import ProjectRepository from "../../repository/ProjectRepository";
 import MongoDB from "../../database/MongoDB";
-import ConnectionParams from "../../interfaces/ConnectionParams";
-import { Db } from "mongodb";
+import { ObjectId } from "mongodb";
+import { dbConnParams } from '../../../config/config';
 require('dotenv');
 
 class ProjectController {
     public insertMyProjects = (request:Request, response:Response):Response => {
-        const {env} = process;
-        const connParams:ConnectionParams = {
-            password:env.DB_PASSWORD ?? "",
-            databaseName:env.DB_NAME ?? "",
-            databaseUser:env.DB_USER ?? ""
-        }
-        const db = new MongoDB(connParams);
+        const db = new MongoDB(dbConnParams);
             db.setConnectionString();
             db.setClient();      
         let message = "";
         try {
             const projectRepository = new ProjectRepository(db)
-            console.log(projectRepository)
             projectRepository.insertMyProjects();
             message = 'Tudo certo!';
             response.status(200);
@@ -36,15 +30,10 @@ class ProjectController {
 
     public listProjects = async (request:Request, response:Response):Promise<Response> => 
     {
-        const {env} = process;
-        const connParams:ConnectionParams = {
-            password: env.DB_PASSWORD ?? "",
-            databaseName:env.DB_NAME ?? "",
-            databaseUser:env.DB_USER ?? ""
-        }
-        const db = new MongoDB(connParams);
+        const db = new MongoDB(dbConnParams);
             db.setConnectionString();
-            db.setClient();      
+            db.setClient();     
+            
         let message = "";
         let data = "Sem registros!";
         let err:any = false;
@@ -62,6 +51,28 @@ class ProjectController {
             message = 'Erro';
         }finally{
             return response.send({message : message ?? "Erro", err, data});
+        }
+    }
+    // public update = async (request:Request, response:Response):Promise<Response> => {
+    // }
+    public get = async (request:Request, response:Response):Promise<Response> => {
+        const {projectId} = request.params
+        const _id = new ObjectId(projectId);
+        const db = new MongoDB(dbConnParams);
+            db.setConnectionString();
+            db.setClient(); 
+        try {
+            const projectRepository = new ProjectRepository(db)
+            const project = await projectRepository.getProject(_id);
+            response.status(200);
+            response.header('Content-type','application/json; charset=utf-8');
+            return response.send(project);
+        } catch (error) {
+            response.status(404);
+            response.header('Content-type','application/json; charset=utf-8');
+            return response.send(error);
+        } finally {
+            if(db.isConnected) db.closeConnection();
         }
     }
 }
