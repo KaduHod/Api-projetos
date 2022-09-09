@@ -30,6 +30,7 @@ class ProjectController {
 
     public listProjects = async (request:Request, response:Response):Promise<Response> => 
     {
+        console.log()
         const db = new MongoDB(dbConnParams);
             db.setConnectionString();
             db.setClient();     

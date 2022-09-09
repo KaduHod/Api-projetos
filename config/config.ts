@@ -8,16 +8,16 @@ const config = {
         const connections:any = {
             "prod" : {
                 "projects":{
-                    password:"",
-                    databaseName:"",
-                    databaseUser:""
+                    password:'pVFlhjCLDU7WmcTu',
+                    databaseName:"projects",
+                    databaseUser:'projectsclusterts'
                 }
             },
             "dev":{
                 "projects":{
-                    password: env.DB_PASSWORD ?? "",
-                    databaseName:env.DB_NAME ?? "",
-                    databaseUser:env.DB_USER ?? ""
+                    password:'pVFlhjCLDU7WmcTu',
+                    databaseName:"projects",
+                    databaseUser:'projectsclusterts'
                 }
             }
         }

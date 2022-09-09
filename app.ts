@@ -1,16 +1,10 @@
 import express from 'express';
 import Routes from './app/http/routes';
 require('dotenv').config({path: '.env'});
-import MongoDB from './app/database/MongoDB';
-
-
 const app = express();
-const {PORT, URL_DEV, URL_PROD, DB_PASSWORD, DB_USER, DB_NAME} = process.env;
+const {PORT, URL_DEV} = process.env;
 app.use(Routes);
-
-
-
-app.listen(PORT, ()=>{
+app.listen(PORT || 9999, ()=>{
     console.log(`running at ${URL_DEV}${PORT}`)
 });
 
