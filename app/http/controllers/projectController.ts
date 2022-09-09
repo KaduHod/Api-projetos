@@ -37,6 +37,8 @@ class ProjectController {
         let message = "";
         let data = "Sem registros!";
         let err:any = false;
+        console.log('aqui')
+        console.log(db)
         try {
             const projectRepository = new ProjectRepository(db);
             const projects = await projectRepository.all();
