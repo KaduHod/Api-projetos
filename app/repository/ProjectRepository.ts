@@ -110,7 +110,7 @@ export default class ProjectRepository {
             
             
         ]
-        //this.collection.insertMany(projects)
+        this.collection.insertMany(projects)
         this.client.closeConnection();
     }
 
@@ -145,7 +145,6 @@ export default class ProjectRepository {
             this.client.closeConnection();
         }
     }
-
     public getProject = async (projectId:ObjectId):Promise<Document | any> =>
     {
         try {
