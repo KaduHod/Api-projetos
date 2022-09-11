@@ -1,4 +1,4 @@
-import { Collection, CursorFlag, Document, MongoClient, ObjectID, ObjectId } from 'mongodb';
+import { Collection, CursorFlag, Document, MongoClient, ObjectId } from 'mongodb';
 import MongoDB from '../database/MongoDB';
 import ProjectInterface from '../interfaces/ProjectInterface';
 
