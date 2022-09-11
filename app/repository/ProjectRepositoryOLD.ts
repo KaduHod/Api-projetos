@@ -1,21 +1,18 @@
 import { Collection, CursorFlag, Document, MongoClient, ObjectId } from 'mongodb';
 import MongoDB from '../database/MongoDB';
 import ProjectInterface from '../interfaces/ProjectInterface';
-import { getDb } from "./../database/init";
 
 export default class ProjectRepository {
-    public client:any;
+    public client:MongoDB;
     public db:any;
     public collection:any;
 
-    constructor(){
-        this.client = getDb();
-        this.db = getDb().db('api-projects');
-        console.log('\t DATABASE')
-        console.log(this.db)
-        //this.collection = this.db.collection('projects');
+    constructor(client:MongoDB){
+        this.client = client
+        this.db = client.client?.db('api-projects');
+        this.collection = this.db.collection('projects');
     }
-/*
+
     public insertMyProjects = async ():Promise<void> => {
         await this.client.openConnection();
         
@@ -115,10 +112,10 @@ export default class ProjectRepository {
         ]
         this.collection.insertMany(projects)
         this.client.closeConnection();
-    }*/
+    }
 
     public all = async ():Promise<Document | any>  => {
-        //if(!this.client.isConnected) await this.client.openConnection();
+        if(!this.client.isConnected) await this.client.openConnection();
         try {
             const cursor = this.collection.find();
             const projects:any[] = [];
@@ -126,9 +123,11 @@ export default class ProjectRepository {
             return projects;
         } catch (error) {
             return error
+        } finally {
+            this.client.closeConnection();
         }
     }
-   /* public CorrigirTesto = async():Promise<Document | any> =>{
+    public CorrigirTesto = async():Promise<Document | any> =>{
         if(!this.client.isConnected) await this.client.openConnection();
         try {
 
@@ -142,18 +141,22 @@ export default class ProjectRepository {
             return result;
         } catch (error) {
             return error
+        } finally {
+            this.client.closeConnection();
         }
     }
     public getProject = async (projectId:ObjectId):Promise<Document | any> =>
     {
         try {
-            //if(!this.client.isConnected) await this.client.openConnection();
+            if(!this.client.isConnected) await this.client.openConnection();
             const data = await this.collection.findOne({_id:projectId});
             return data;
         } catch (error) {
             console.log(error)
             return error;
+        } finally {
+            this.client.closeConnection();
         }
         
-    }*/
+    }
 }
