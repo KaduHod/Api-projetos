@@ -10,10 +10,9 @@ export default class ProjectRepository {
 
     constructor(){
         this.client = getDb();
-        this.db = getDb().db('api-projects');
-        console.log('\t DATABASE')
-        console.log(this.db)
-        //this.collection = this.db.collection('projects');
+        console.log(this.client.db, 'AQUII')
+        this.db = this.client.db('api-projects');
+        this.collection = this.db.collection('projects');
     }
 /*
     public insertMyProjects = async ():Promise<void> => {

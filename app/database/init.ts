@@ -1,14 +1,14 @@
-import MongoDB from "./MongoDB";
+import {DB} from "./db";
 import ConnectionParams from '../interfaces/ConnectionParams'
 import { MongoClient } from "mongodb";
-var db:MongoClient | boolean;
+var db:any = null;
 
 
-const initialize = async ():Promise<void> => {
+const initialize = async ():Promise<MongoClient | any> => {
     try {
         if(db){
             console.log('Conexão ja realizada')
-            return;
+            return true;
         }
         console.log('\tInciando conexão com o banco de dados')
         const connParams:ConnectionParams = {
@@ -17,22 +17,22 @@ const initialize = async ():Promise<void> => {
             databaseUser: process.env.DB_USER ?? ""
         }
         console.log('Parametros de conexão', connParams);
-        const mongo = new MongoDB(connParams);
-        mongo.setConnectionString();
-        await mongo.openConnection();
-        mongo.setClient();
-        db = mongo.client;
+        const mongo:DB = new DB(connParams);
+        await mongo.connect()
+        db = mongo;
+        console.log('\tConexão realizada!')
+        return mongo.client;
     } catch (error) {
         console.log('\t====Erro====')
         console.log(error)
         db = false;
+        return false;
     }
 }
-
 const getDb =  async ()=>{
     if(!db) console.log('Erro ao chamar banco de dados');
-    console.log(db)
-    return db;
+    console.log(db, 'aquiii2')
+    return db.client;
 }
 
 export {

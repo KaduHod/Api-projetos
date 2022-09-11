@@ -32,7 +32,7 @@ class ProjectController {
         let err:any = false;
         try {
             const projectRepository = new ProjectRepository();
-            const projects = await projectRepository.all();
+            // const projects = await projectRepository.all();
             message = 'Tudo certo';
             data = "projects";
             response.status(200);

@@ -30,8 +30,6 @@ export default class MongoDB {
             console.log(error);
             return false;
         }
-        
-        
     }
 
     public setClient = ():boolean => {
@@ -44,11 +42,17 @@ export default class MongoDB {
         }
     }
 
-    public openConnection = async () => {
+    public getClient(){
+        if(!this.client) this.setClient();
+        return this.client;
+    }
+
+    public openConnection = async ():Promise<boolean> => {
         try {
             console.log('\t Connected!')
             this.isConnected = true;
-            return await this.client?.connect();
+            await this.client?.connect();
+            return true;
         } catch (error) {
             console.log('\t Connection closed!')
             console.log(error)
