@@ -1,38 +1,35 @@
-import {DB} from "./db";
-import ConnectionParams from '../interfaces/ConnectionParams'
-import { MongoClient } from "mongodb";
-var db:any = null;
-
-
-const initialize = async ():Promise<MongoClient | any> => {
+import DB from "./MongoDB";
+import {DatabaseConfig, ConnectionParams} from '../interfaces/database'
+var db:DB | null = null;
+const initialize = async ():Promise<boolean> => {
     try {
         if(db){
-            console.log('Conexão ja realizada')
+            console.log('Already connected!')
             return true;
         }
-        console.log('\tInciando conexão com o banco de dados')
+        console.log('\tConnecting...')
         const connParams:ConnectionParams = {
             password: process.env.DB_PASSWORD ?? "",
             databaseName: process.env.DB_NAME ?? "",
             databaseUser: process.env.DB_USER ?? ""
         }
-        console.log('Parametros de conexão', connParams);
         const mongo:DB = new DB(connParams);
         await mongo.connect()
         db = mongo;
-        console.log('\tConexão realizada!')
-        return mongo.client;
+        console.log('\tConnected!')
+        return true;
     } catch (error) {
-        console.log('\t====Erro====')
+        console.log('\t====Error====')
         console.log(error)
-        db = false;
+        db = null;
         return false;
     }
 }
-const getDb =  async ()=>{
-    if(!db) console.log('Erro ao chamar banco de dados');
-    console.log(db, 'aquiii2')
-    return db.client;
+const getDb = (dbConfig:DatabaseConfig):any =>{
+    if(!db) console.log("Database instance null!");
+    let _db = db?.client.db(dbConfig.database)
+    let _collection = _db?.collection(dbConfig.collection)
+    return _collection;
 }
 
 export {

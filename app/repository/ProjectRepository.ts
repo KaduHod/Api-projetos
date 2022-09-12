@@ -1,23 +1,16 @@
-import { Collection, CursorFlag, Document, MongoClient, ObjectId } from 'mongodb';
-import MongoDB from '../database/MongoDB';
+import { Document, ObjectId } from 'mongodb';
 import ProjectInterface from '../interfaces/ProjectInterface';
-import { getDb } from "./../database/init";
+import { getDb } from '../database/init';
 
 export default class ProjectRepository {
     public client:any;
-    public db:any;
     public collection:any;
 
     constructor(){
-        this.client = getDb();
-        console.log(this.client.db, 'AQUII')
-        this.db = this.client.db('api-projects');
-        this.collection = this.db.collection('projects');
+        this.collection = getDb({database:'api-projects', collection:"projects"});
     }
-/*
+
     public insertMyProjects = async ():Promise<void> => {
-        await this.client.openConnection();
-        
         const projects:ProjectInterface[] = [
             {
                 _id : new ObjectId(),
@@ -114,31 +107,12 @@ export default class ProjectRepository {
         ]
         this.collection.insertMany(projects)
         this.client.closeConnection();
-    }*/
+    }
 
     public all = async ():Promise<Document | any>  => {
-        //if(!this.client.isConnected) await this.client.openConnection();
         try {
             const cursor = this.collection.find();
-            const projects:any[] = [];
-            await cursor.forEach( (doc:any) => projects.push(doc) )
-            return projects;
-        } catch (error) {
-            return error
-        }
-    }
-   /* public CorrigirTesto = async():Promise<Document | any> =>{
-        if(!this.client.isConnected) await this.client.openConnection();
-        try {
-
-            const filter = {
-                _id : new ObjectId("6319488639638a8f8e3792ee")
-            }
-            const $set = {
-                description: 'Construí este site para o meu sogro, que possui uma concessionario do candeias. Nele está disponível para os clientes todos os meios de contato com a concessíonaria, link direto para converso no whatts, localização e lista de hoteis disponiveis para a tão sonhada viagem de férias. Além disso construí uma api que recebe os dados do cliente pra cadastro no portal de registro de socios do candeias e um endpoint que exporta uma planilha com todos os clientes que se inscreveram pelo site.'
-            }
-            const result = await this.collection.updateOne(filter, {$set})
-            return result;
+            return cursor.toArray();
         } catch (error) {
             return error
         }
@@ -146,7 +120,6 @@ export default class ProjectRepository {
     public getProject = async (projectId:ObjectId):Promise<Document | any> =>
     {
         try {
-            //if(!this.client.isConnected) await this.client.openConnection();
             const data = await this.collection.findOne({_id:projectId});
             return data;
         } catch (error) {
@@ -154,5 +127,5 @@ export default class ProjectRepository {
             return error;
         }
         
-    }*/
+    }
 }

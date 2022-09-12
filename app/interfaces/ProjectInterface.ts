@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 export default interface ProjectInterface {
-    _id:ObjectId | number;
+    _id:ObjectId;
     name:string;
     description:string;
     link:string;
