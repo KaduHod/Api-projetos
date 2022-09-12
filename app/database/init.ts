@@ -1,7 +1,7 @@
 import DB from "./MongoDB";
 import {DatabaseConfig, ConnectionParams} from '../interfaces/database'
 var db:DB | null = null;
-const initialize = async ():Promise<boolean> => {
+export const initialize = async ():Promise<boolean> => {
     try {
         if(db){
             console.log('Already connected!')
@@ -25,14 +25,9 @@ const initialize = async ():Promise<boolean> => {
         return false;
     }
 }
-const getDb = (dbConfig:DatabaseConfig):any =>{
+export const getDb = (dbConfig:DatabaseConfig):any =>{
     if(!db) console.log("Database instance null!");
     let _db = db?.client.db(dbConfig.database)
     let _collection = _db?.collection(dbConfig.collection)
     return _collection;
-}
-
-export {
-    getDb,
-    initialize
 }
