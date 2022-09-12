@@ -27,7 +27,7 @@ export const initialize = async ():Promise<boolean> => {
 }
 export const getDb = (dbConfig:DatabaseConfig):any =>{
     if(!db) console.log("Database instance null!");
-    let _db = db?.client.db(dbConfig.database)
-    let _collection = _db?.collection(dbConfig.collection)
+    const _db = db?.client.db(dbConfig.database)
+    const _collection = _db?.collection(dbConfig.collection)
     return _collection;
 }
