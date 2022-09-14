@@ -4,11 +4,11 @@ import { Collection, ObjectId } from "mongodb";
 require('dotenv');
 
 class ProjectController {
-    public insertMyProjects = (request:Request, response:Response):Response => {    
+    public listProjectsLocal = (request:Request, response:Response):Response => {    
         let message = "";
+        let data:object[] | null = null;
         try {
-            const projectRepository = new ProjectRepository()
-            projectRepository.insertMyProjects();
+            data = ProjectRepository.allLocal();
             message = 'Tudo certo!';
             response.status(200);
             response.header('Content-type','application/json; charset=utf-8');
@@ -17,7 +17,7 @@ class ProjectController {
             response.header('Content-type','application/json; charset=utf-8');
             message = 'Erro';
         }finally{
-            return response.send({message : message ?? "Erro"});
+            return response.send({message : message ?? "Erro", data: data ?? 'Empty data (<..>)'});
         }
     }
 
