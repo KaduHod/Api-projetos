@@ -5,7 +5,10 @@ import cors from 'cors';
 require('dotenv').config({path: '.env'});
 const app = express();
 const {PORT, URL_DEV} = process.env;
-app.use(cors())
+const corsOptions = {
+    origin:'http://localhost:5173'
+}
+app.use(cors(corsOptions))
 app.use(Routes);
 initialize().then(()=>{
     app.listen(PORT || 9999, ()=>{
